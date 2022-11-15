@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="HTWModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="MV_MOVIE">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1200" />
+          <Property Name="Avartar" Type="nvarchar" MaxLength="500" />
+          <Property Name="ReleaseDate" Type="datetime" />
+          <Property Name="RunningTime" Type="int" />
+          <Property Name="IsDelete" Type="bit" />
+          <Property Name="DeleteDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="MV_NumberUsersLike">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUser" Type="int" Nullable="false" />
+          <Property Name="IdMovie" Type="int" Nullable="false" />
+          <Property Name="IsLike" Type="bit" />
+          <Property Name="LikeDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="PS_USERS">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="IsDisabled" Type="bit" />
+          <Property Name="IsDelete" Type="bit" />
+          <Property Name="DeleteDate" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_MovieLike">
+          <End Role="MV_MOVIE" Type="Self.MV_MOVIE" Multiplicity="1" />
+          <End Role="MV_NumberUsersLike" Type="Self.MV_NumberUsersLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MV_MOVIE">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MV_NumberUsersLike">
+              <PropertyRef Name="IdMovie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserLike">
+          <End Role="PS_USERS" Type="Self.PS_USERS" Multiplicity="1" />
+          <End Role="MV_NumberUsersLike" Type="Self.MV_NumberUsersLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PS_USERS">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MV_NumberUsersLike">
+              <PropertyRef Name="IdUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="SP_GetListMovie" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="KeySearch" Type="nvarchar" Mode="In" />
+          <Parameter Name="ReleaseDateTo" Type="datetime" Mode="In" />
+          <Parameter Name="ReleaseDateFrom" Type="datetime" Mode="In" />
+          <Parameter Name="PageNumber" Type="int" Mode="In" />
+          <Parameter Name="RowspPage" Type="int" Mode="In" />
+          <Parameter Name="SortName" Type="varchar" Mode="In" />
+          <Parameter Name="SortDirection" Type="varchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="HTWModelStoreContainer">
+          <EntitySet Name="MV_MOVIE" EntityType="Self.MV_MOVIE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MV_NumberUsersLike" EntityType="Self.MV_NumberUsersLike" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PS_USERS" EntityType="Self.PS_USERS" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_MovieLike" Association="Self.FK_MovieLike">
+            <End Role="MV_MOVIE" EntitySet="MV_MOVIE" />
+            <End Role="MV_NumberUsersLike" EntitySet="MV_NumberUsersLike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserLike" Association="Self.FK_UserLike">
+            <End Role="PS_USERS" EntitySet="PS_USERS" />
+            <End Role="MV_NumberUsersLike" EntitySet="MV_NumberUsersLike" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HTWModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="MV_MOVIE">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="1200" FixedLength="false" Unicode="true" />
+          <Property Name="Avartar" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ReleaseDate" Type="DateTime" Precision="3" />
+          <Property Name="RunningTime" Type="Int32" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="DeleteDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MV_NumberUsersLike" Relationship="Self.FK_MovieLike" FromRole="MV_MOVIE" ToRole="MV_NumberUsersLike" />
+        </EntityType>
+        <EntityType Name="MV_NumberUsersLike">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="IdMovie" Type="Int32" Nullable="false" />
+          <Property Name="IsLike" Type="Boolean" />
+          <Property Name="LikeDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MV_MOVIE" Relationship="Self.FK_MovieLike" FromRole="MV_NumberUsersLike" ToRole="MV_MOVIE" />
+          <NavigationProperty Name="PS_USERS" Relationship="Self.FK_UserLike" FromRole="MV_NumberUsersLike" ToRole="PS_USERS" />
+        </EntityType>
+        <EntityType Name="PS_USERS">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IsDisabled" Type="Boolean" />
+          <Property Name="IsDelete" Type="Boolean" />
+          <Property Name="DeleteDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="MV_NumberUsersLike" Relationship="Self.FK_UserLike" FromRole="PS_USERS" ToRole="MV_NumberUsersLike" />
+        </EntityType>
+        <Association Name="FK_MovieLike">
+          <End Role="MV_MOVIE" Type="Self.MV_MOVIE" Multiplicity="1" />
+          <End Role="MV_NumberUsersLike" Type="Self.MV_NumberUsersLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MV_MOVIE">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MV_NumberUsersLike">
+              <PropertyRef Name="IdMovie" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserLike">
+          <End Role="PS_USERS" Type="Self.PS_USERS" Multiplicity="1" />
+          <End Role="MV_NumberUsersLike" Type="Self.MV_NumberUsersLike" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PS_USERS">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="MV_NumberUsersLike">
+              <PropertyRef Name="IdUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HTWEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="MV_MOVIE" EntityType="Self.MV_MOVIE" />
+          <EntitySet Name="MV_NumberUsersLike" EntityType="Self.MV_NumberUsersLike" />
+          <EntitySet Name="PS_USERS" EntityType="Self.PS_USERS" />
+          <AssociationSet Name="FK_MovieLike" Association="Self.FK_MovieLike">
+            <End Role="MV_MOVIE" EntitySet="MV_MOVIE" />
+            <End Role="MV_NumberUsersLike" EntitySet="MV_NumberUsersLike" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserLike" Association="Self.FK_UserLike">
+            <End Role="PS_USERS" EntitySet="PS_USERS" />
+            <End Role="MV_NumberUsersLike" EntitySet="MV_NumberUsersLike" />
+          </AssociationSet>
+          <FunctionImport Name="SP_GetListMovie" ReturnType="Collection(HTWModel.SP_GetListMovie_Result)">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="KeySearch" Mode="In" Type="String" />
+            <Parameter Name="ReleaseDateTo" Mode="In" Type="DateTime" />
+            <Parameter Name="ReleaseDateFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="PageNumber" Mode="In" Type="Int32" />
+            <Parameter Name="RowspPage" Mode="In" Type="Int32" />
+            <Parameter Name="SortName" Mode="In" Type="String" />
+            <Parameter Name="SortDirection" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="SP_GetListMovie_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="250" />
+          <Property Type="DateTime" Name="ReleaseDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="RunningTime" Nullable="true" />
+          <Property Type="String" Name="Avartar" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="1200" />
+          <Property Type="Int32" Name="Total" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HTWModelStoreContainer" CdmEntityContainer="HTWEntities">
+          <EntitySetMapping Name="MV_MOVIE">
+            <EntityTypeMapping TypeName="HTWModel.MV_MOVIE">
+              <MappingFragment StoreEntitySet="MV_MOVIE">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Avartar" ColumnName="Avartar" />
+                <ScalarProperty Name="ReleaseDate" ColumnName="ReleaseDate" />
+                <ScalarProperty Name="RunningTime" ColumnName="RunningTime" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="DeleteDate" ColumnName="DeleteDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MV_NumberUsersLike">
+            <EntityTypeMapping TypeName="HTWModel.MV_NumberUsersLike">
+              <MappingFragment StoreEntitySet="MV_NumberUsersLike">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+                <ScalarProperty Name="IdMovie" ColumnName="IdMovie" />
+                <ScalarProperty Name="IsLike" ColumnName="IsLike" />
+                <ScalarProperty Name="LikeDate" ColumnName="LikeDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PS_USERS">
+            <EntityTypeMapping TypeName="HTWModel.PS_USERS">
+              <MappingFragment StoreEntitySet="PS_USERS">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IsDisabled" ColumnName="IsDisabled" />
+                <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+                <ScalarProperty Name="DeleteDate" ColumnName="DeleteDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetListMovie" FunctionName="HTWModel.Store.SP_GetListMovie">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="HTWModel.SP_GetListMovie_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ReleaseDate" ColumnName="ReleaseDate" />
+                <ScalarProperty Name="RunningTime" ColumnName="RunningTime" />
+                <ScalarProperty Name="Avartar" ColumnName="Avartar" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

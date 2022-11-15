@@ -1,0 +1,33 @@
+﻿@using MovieAppBLL;
+@inherits System.Web.Mvc.WebViewPage<MovieViewModel>
+@{
+    Layout = null;
+}
+@if (Model != null)
+{
+    string imgLike = Model.IsUserLike == true ? "/Images/love.png" : "/Images/unlove.png";
+
+    <div class=app-icon-details>
+        <div class=app-icon-title>@Model.Title</div>
+    </div>
+    <div class=app-icon-image>
+        <div class="svg-icon moviefilm-group">
+
+            @{
+                var srcIMG = string.IsNullOrEmpty(Model.Avartar) ? "/Images/No_Image_Available.jpg" : Model.Avartar;
+            }
+            <img src="@srcIMG" style="width:100%" />
+        </div>
+    </div>
+    <div class=app-icon-details>
+        <div class=app-icon-title>@Model.CountLikes Likes</div>
+        <div style="padding:10px">
+            <button onclick="likeCardToFilm('@Model.GuId')" class="button button-like"><img src="@imgLike" /></button>
+        </div>
+    </div>
+}
+
+
+
+
+
